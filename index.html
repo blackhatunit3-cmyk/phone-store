@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="ar" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart phones store</title>
+    
+    <!-- Google Fonts: Tajawal -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            dark: '#070b14',
+                            card: '#0e172a',
+                            border: '#1e293b',
+                            accent: '#00b4d8',
+                            blue: '#1d4ed8',
+                            glow: '#0284c7'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Tajawal', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: #070b14;
+            color: #f1f5f9;
+            overflow-x: hidden;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #070b14;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1e293b;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #00b4d8;
+        }
+
+        /* Glowing background effects */
+        .hero-glow {
+            background: radial-gradient(circle at 75% 30%, rgba(14, 165, 233, 0.25) 0%, rgba(29, 78, 216, 0.15) 35%, rgba(7, 11, 20, 0) 70%);
+        }
+
+        .card-glow {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .card-glow:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 30px -10px rgba(0, 180, 216, 0.3);
+            border-color: rgba(0, 180, 216, 0.5);
+        }
+
+        .glass-panel {
+            background: rgba(14, 23, 42, 0.75);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .btn-gradient {
+            background: linear-gradient(135deg, #0284c7 0%, #2563eb 100%);
+            transition: all 0.3s ease;
+        }
+
+        .btn-gradient:hover {
+            background: linear-gradient(135deg, #38bdf8 0%, #1d4ed8 100%);
+            box-shadow: 0 0 20px rgba(2, 132, 199, 0.5);
+        }
+
+        /* Toast Message Notification */
+        #toast {
+            visibility: hidden;
+            min-width: 280px;
+            transform: translateY(100px);
+            transition: all 0.4s ease-in-out;
+        }
+        #toast.show {
+            visibility: visible;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-cyan-500 selection:text-white">
+
+    <!-- Header Navigation -->
+    <header class="sticky top-0 z-50 glass-panel border-b border-slate-800/80">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            
+            <!-- Store Logo -->
+            <a href="#" class="flex items-center gap-3 group">
+                <div class="w-11 h-11 rounded-xl bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center shadow-lg shadow-cyan-500/20 group-hover:scale-105 transition-transform">
+                    <i class="fa-solid fa-mobile-screen-button text-2xl text-white"></i>
+                </div>
+                <div class="flex flex-col">
+                    <span class="text-2xl font-black tracking-tight text-white flex items-center gap-1">
+                        HUB PHONE
+                    </span>
+                    <span class="text-[10px] text-cyan-400 font-medium tracking-widest -mt-1 uppercase"> PHONES STORE • PHONEHUB</span>
+                </div>
+            </a>
+
+            <!-- Navigation Links -->
+            <nav class="hidden md:flex items-center gap-8 text-sm font-medium">
+                <a href="#" class="text-cyan-400 font-bold border-b-2 border-cyan-400 pb-1 transition-colors">Home</a>
+                <a href="#products" class="text-slate-300 hover:text-cyan-400 transition-colors">PHONES</a>
+                <a href="#" class="text-slate-300 hover:text-cyan-400 transition-colors">Accessories</a>
+                <a href="#" class="text-slate-300 hover:text-cyan-400 transition-colors">offers</a>
+                <a href="#" class="text-slate-300 hover:text-cyan-400 transition-colors">Support</a>
+                <a href="#" class="text-slate-300 hover:text-cyan-400 transition-colors">About us </a>
+            </nav>
+
+            <!-- Action Icons (Search, User, Cart) -->
+            <div class="flex items-center gap-4">
+                <button aria-label="بحث" class="w-10 h-10 rounded-lg flex items-center justify-center text-slate-300 hover:text-white hover:bg-slate-800/60 transition-all">
+                    <i class="fa-solid fa-magnifying-glass text-lg"></i>
+                </button>
+                <button aria-label="الحساب" class="w-10 h-10 rounded-lg flex items-center justify-center text-slate-300 hover:text-white hover:bg-slate-800/60 transition-all">
+                    <i class="fa-regular fa-user text-lg"></i>
+                </button>
+                <div class="relative">
+                    <button id="cartBtn" aria-label="Cart " class="w-10 h-10 rounded-lg flex items-center justify-center text-slate-300 hover:text-white hover:bg-slate-800/60 transition-all">
+                        <i class="fa-solid fa-cart-shopping text-lg"></i>
+                        <span id="cartBadge" class="absolute -top-1 -right-1 bg-cyan-500 text-slate-950 font-bold text-xs w-5 h-5 rounded-full flex items-center justify-center shadow-md">3</span>
+                    </button>
+                </div>
+                <!-- Mobile menu toggle button -->
+                <button id="mobileMenuBtn" class="md:hidden w-10 h-10 rounded-lg flex items-center justify-center text-slate-300 hover:text-white">
+                    <i class="fa-solid fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Drawer Menu -->
+        <div id="mobileMenu" class="hidden md:hidden bg-slate-900 border-b border-slate-800 px-6 py-4 space-y-3">
+            <a href="#" class="block text-cyan-400 font-bold py-1">Home</a>
+            <a href="#products" class="block text-slate-300 hover:text-cyan-400 py-1">Phones</a>
+            <a href="#" class="block text-slate-300 hover:text-cyan-400 py-1">Accessories</a>
+            <a href="#" class="block text-slate-300 hover:text-cyan-400 py-1">Offers</a>
+            <a href="#" class="block text-slate-300 hover:text-cyan-400 py-1">Support</a>
+            <a href="#" class="block text-slate-300 hover:text-cyan-400 py-1">About us </a>
+        </div>
+    </header>
+
+    <!-- Hero Banner Section -->
+    <section class="relative hero-glow pt-8 pb-16 lg:py-20 overflow-hidden border-b border-slate-800/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                
+                <!-- Right Text Column -->
+                <div class="lg:col-span-7 space-y-6 text-center lg:text-right z-10">
+                    
+                    <!-- Pill Tag -->
+                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-cyan-950/80 border border-cyan-500/30 text-cyan-400 text-xs font-bold tracking-wide">
+                        <span>New - 2024</span>
+                        <span class="text-sm">✨</span>
+                    </div>
+
+                    <!-- Main Banner Headline -->
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black text-white leading-tight tracking-tight">
+                      Latest Smartphones <br>
+                        <span class="bg-gradient-to-l from-cyan-400 via-sky-300 to-blue-500 bg-clip-text text-transparent">
+                              At the Best Prices Now
+                        </span>
+                    </h1>
+
+                    <!-- Subtitle -->
+                    <p class="text-slate-300 text-base sm:text=-lg max-w-2xl leading-relaxed font-normal mx-auto lg:mx-0">
+                        Shop the latest smartphones from the best global brands , with official warranty and free , fast shipping to all cities .
+                    </p>
+
+                    <!-- CTA Buttons -->
+                    <div class="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-2">
+                        <a href="#products" class="btn-gradient text-white font-bold px-8 py-3.5 rounded-xl flex items-center gap-3 text-base shadow-lg shadow-cyan-500/20 active:scale-95">
+                            <span> Shop Now</span>
+                            <i class="fa-solid fa-arrow-left text-sm"></i>
+                        </a>
+                        <button class="px-7 py-3.5 rounded-xl border border-slate-700 bg-slate-900/60 hover:bg-slate-800 text-slate-200 font-semibold transition-all flex items-center gap-2 text-base hover:border-slate-500">
+                            <i class="fa-solid fa-circle-play text-cyan-400 text-sm"></i>
+                            <span>Explore Deals </span>
+                        </button>
+                    </div>
+
+                    <!-- Feature Badges -->
+                    <div class="pt-6 border-t border-slate-800/80 flex flex-wrap items-center justify-center lg:justify-start gap-6 text-xs text-slate-300">
+                        <div class="flex items-center gap-2 bg-slate-900/80 px-3.5 py-2 rounded-lg border border-slate-800">
+                            <i class="fa-solid fa-shield-halved text-cyan-400 text-sm"></i>
+                            <span> Secure Payment 100%  </span>
+                        </div>
+                        <div class="flex items-center gap-2 bg-slate-900/80 px-3.5 py-2 rounded-lg border border-slate-800">
+                            <i class="fa-solid fa-truck-fast text-cyan-400 text-sm"></i>
+                            <span>  Free Shipping Within 48 Hours  </span>
+                        </div>
+                        <div class="flex items-center gap-2 bg-slate-900/80 px-3.5 py-2 rounded-lg border border-slate-800">
+                            <i class="fa-solid fa-award text-cyan-400 text-sm"></i>
+                            <span> Month Warranty-24 </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Left Visual Image Column -->
+                <div class="lg:col-span-5 relative flex justify-center">
+                    <div class="relative w-full max-w-lg">
+                        <!-- Decorative glow element -->
+                        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-cyan-500/20 rounded-full blur-3xl pointer-events-none"></div>
+                        
+                        <!-- High Quality Phones Graphic Render -->
+                        <img src="https://images.unsplash.com/photo-1592750475338-74b7b21085ab?q=80&w=1000&auto=format&fit=crop" 
+                             alt="أحدث الهواتف الذكية" 
+                             class="relative z-10 w-full h-auto max-h-[460px] object-contain drop-shadow-[0_20px_50px_rgba(2,132,199,0.35)] rounded-3xl transform hover:scale-105 transition-transform duration-500"
+                             onerror="this.onerror=null; this.src='https://placehold.co/600x500/0e172a/00b4d8?text=Smartphones+2024';">
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Products Section -->
+    <section id="products" class="py-16 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <!-- Section Header -->
+            <div class="text-center max-w-2xl mx-auto mb-12">
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-3">Featured Products </h2>
+                <p class="text-slate-400 text-sm sm:text-base">Choose from our collection of the latest phones available now with the best deals </p>
+            </div>
+
+            <!-- Products Grid (4 Columns) -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                
+                <!-- Product Card 1: iPhone 15 Pro -->
+                <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-4 card-glow relative flex flex-col justify-between group">
+                    <div>
+                        <!-- Badge -->
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="bg-rose-500/20 text-rose-400 border border-rose-500/30 text-xs font-bold px-2.5 py-1 rounded-md">
+                                Off 15 % 
+                            </span>
+                            <button aria-label="إضافة للمفضلة" class="text-slate-500 hover:text-rose-500 transition-colors">
+                                <i class="fa-regular fa-heart"></i>
+                            </button>
+                        </div>
+                        
+                        <!-- Image Container -->
+                        <div class="w-full h-52 bg-slate-950/60 rounded-xl mb-4 p-4 flex items-center justify-center relative overflow-hidden group-hover:bg-slate-950/80 transition-colors">
+                            <img src="https://images.unsplash.com/photo-1695048133142-1a20484d2569?q=80&w=600&auto=format&fit=crop" 
+                                 alt="iPhone 15 Pro" 
+                                 class="max-h-full max-w-full object-contain group-hover:scale-110 transition-transform duration-300"
+                                 onerror="this.onerror=null; this.src='https://placehold.co/300x400/0e172a/ffffff?text=iPhone+15+Pro';">
+                        </div>
+
+                        <!-- Product Info -->
+                        <h3 class="text-white font-bold text-base mb-1.5 line-clamp-1 group-hover:text-cyan-400 transition-colors">
+                            iPhone 15 Pro - 256GB
+                        </h3>
+
+                        <!-- Rating & Reviews -->
+                        <div class="flex items-center gap-1 text-xs text-slate-400 mb-3">
+                            <div class="flex text-amber-400 text-[10px]">
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star-half-stroke"></i>
+                            </div>
+                            <span class="font-medium text-slate-300">4.8</span>
+                            <span>(Reviews 46 )</span>
+                        </div>
+                    </div>
+
+                    <!-- Price & Add Button -->
+                    <div>
+                        <div class="flex items-baseline justify-between mb-4">
+                            <div class="flex flex-col">
+                                <span class="text-xs text-slate-500 line-through">4,999 MAD</span>
+                                <span class="text-xl font-black text-cyan-400">4,219 <span class="text-xs font-normal">MAD</span></span>
+                            </div>
+                        </div>
+                        <button onclick="addToCart('iPhone 15 Pro - 256GB')" class="w-full bg-slate-800/80 hover:bg-cyan-600 border border-slate-700 hover:border-cyan-500 text-white font-bold py-2.5 rounded-xl transition-all flex items-center justify-center gap-2 text-sm group-hover:bg-cyan-600">
+                            <i class="fa-solid fa-cart-plus text-xs"></i>
+                            <span>Add to cart </span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Product Card 2: Samsung Galaxy S24 Ultra -->
+                <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-4 card-glow relative flex flex-col justify-between group">
+                    <div>
+                        <!-- Badge -->
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="bg-sky-500/20 text-sky-400 border border-sky-500/30 text-xs font-bold px-2.5 py-1 rounded-md">
+                                New
+                            </span>
+                            <button aria-label="إضافة للمفضلة" class="text-slate-500 hover:text-rose-500 transition-colors">
+                                <i class="fa-regular fa-heart"></i>
+                            </button>
+                        </div>
+                        
+                        <!-- Image Container -->
+                        <div class="w-full h-52 bg-slate-950/60 rounded-xl mb-4 p-4 flex items-center justify-center relative overflow-hidden group-hover:bg-slate-950/80 transition-colors">
+                            <img src="https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?q=80&w=600&auto=format&fit=crop" 
+                                 alt="Samsung Galaxy S24 Ultra" 
+                                 class="max-h-full max-w-full object-contain group-hover:scale-110 transition-transform duration-300"
+                                 onerror="this.onerror=null; this.src='https://placehold.co/300x400/0e172a/ffffff?text=Galaxy+S24+Ultra';">
+                        </div>
+
+                        <!-- Product Info -->
+                        <h3 class="text-white font-bold text-base mb-1.5 line-clamp-1 group-hover:text-cyan-400 transition-colors">
+                            Samsung Galaxy S24 Ultra - 512GB
+                        </h3>
+
+                        <!-- Rating & Reviews -->
+                        <div class="flex items-center gap-1 text-xs text-slate-400 mb-3">
+                            <div class="flex text-amber-400 text-[10px]">
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                            </div>
+                            <span class="font-medium text-slate-300">4.9</span>
+                            <span>(Reviews 97 )</span>
+                        </div>
+                    </div>
+
+                    <!-- Price & Add Button -->
+                    <div>
+                        <div class="flex items-baseline justify-between mb-4">
+                            <span class="text-xl font-black text-cyan-400">3,899 <span class="text-xs font-normal">MAD</span></span>
+                        </div>
+                        <button onclick="addToCart('Samsung Galaxy S24 Ultra')" class="w-full bg-slate-800/80 hover:bg-cyan-600 border border-slate-700 hover:border-cyan-500 text-white font-bold py-2.5 rounded-xl transition-all flex items-center justify-center gap-2 text-sm group-hover:bg-cyan-600">
+                            <i class="fa-solid fa-cart-plus text-xs"></i>
+                            <span>Add to cart </span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Product Card 3: Xiaomi 14 Pro -->
+                <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-4 card-glow relative flex flex-col justify-between group">
+                    <div>
+                        <!-- Badge -->
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-xs font-bold px-2.5 py-1 rounded-md">
+                                 Best seller
+                            </span>
+                            <button aria-label="إضافة للمفضلة" class="text-slate-500 hover:text-rose-500 transition-colors">
+                                <i class="fa-regular fa-heart"></i>
+                            </button>
+                        </div>
+                        
+                        <!-- Image Container -->
+                        <div class="w-full h-52 bg-slate-950/60 rounded-xl mb-4 p-4 flex items-center justify-center relative overflow-hidden group-hover:bg-slate-950/80 transition-colors">
+                            <img src="https://images.unsplash.com/photo-1598327105666-5b89351aff97?q=80&w=600&auto=format&fit=crop" 
+                                 alt="Xiaomi 14 Pro" 
+                                 class="max-h-full max-w-full object-contain group-hover:scale-110 transition-transform duration-300"
+                                 onerror="this.onerror=null; this.src='https://placehold.co/300x400/0e172a/ffffff?text=Xiaomi+14+Pro';">
+                        </div>
+
+                        <!-- Product Info -->
+                        <h3 class="text-white font-bold text-base mb-1.5 line-clamp-1 group-hover:text-cyan-400 transition-colors">
+                            Xiaomi 14 Pro - 256GB
+                        </h3>
+
+                        <!-- Rating & Reviews -->
+                        <div class="flex items-center gap-1 text-xs text-slate-400 mb-3">
+                            <div class="flex text-amber-400 text-[10px]">
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star-half-stroke"></i>
+                            </div>
+                            <span class="font-medium text-slate-300">4.6</span>
+                            <span>(Reviews 84 )</span>
+                        </div>
+                    </div>
+
+                    <!-- Price & Add Button -->
+                    <div>
+                        <div class="flex items-baseline justify-between mb-4">
+                            <span class="text-xl font-black text-cyan-400">2,699 <span class="text-xs font-normal">MAD</span></span>
+                        </div>
+                        <button onclick="addToCart('Xiaomi 14 Pro')" class="w-full bg-slate-800/80 hover:bg-cyan-600 border border-slate-700 hover:border-cyan-500 text-white font-bold py-2.5 rounded-xl transition-all flex items-center justify-center gap-2 text-sm group-hover:bg-cyan-600">
+                            <i class="fa-solid fa-cart-plus text-xs"></i>
+                            <span>Add to cart </span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Product Card 4: OnePlus 12 -->
+                <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-4 card-glow relative flex flex-col justify-between group">
+                    <div>
+                        <!-- Badge -->
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="bg-amber-500/20 text-amber-400 border border-amber-500/30 text-xs font-bold px-2.5 py-1 rounded-md">
+                                Exclusive
+                            </span>
+                            <button aria-label="إضافة للمفضلة" class="text-slate-500 hover:text-rose-500 transition-colors">
+                                <i class="fa-regular fa-heart"></i>
+                            </button>
+                        </div>
+                        
+                        <!-- Image Container -->
+                        <div class="w-full h-52 bg-slate-950/60 rounded-xl mb-4 p-4 flex items-center justify-center relative overflow-hidden group-hover:bg-slate-950/80 transition-colors">
+                            <img src="https://images.unsplash.com/photo-1565849904461-04a58ad377e0?q=80&w=600&auto=format&fit=crop" 
+                                 alt="OnePlus 12" 
+                                 class="max-h-full max-w-full object-contain group-hover:scale-110 transition-transform duration-300"
+                                 onerror="this.onerror=null; this.src='https://placehold.co/300x400/0e172a/ffffff?text=OnePlus+12';">
+                        </div>
+
+                        <!-- Product Info -->
+                        <h3 class="text-white font-bold text-base mb-1.5 line-clamp-1 group-hover:text-cyan-400 transition-colors">
+                            OnePlus 12 - 256GB
+                        </h3>
+
+                        <!-- Rating & Reviews -->
+                        <div class="flex items-center gap-1 text-xs text-slate-400 mb-3">
+                            <div class="flex text-amber-400 text-[10px]">
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                                <i class="fa-solid fa-star"></i>
+                            </div>
+                            <span class="font-medium text-slate-300">4.7</span>
+                            <span>(Reviews 62 )</span>
+                        </div>
+                    </div>
+
+                    <!-- Price & Add Button -->
+                    <div>
+                        <div class="flex items-baseline justify-between mb-4">
+                            <span class="text-xl font-black text-cyan-400">2,899 <span class="text-xs font-normal">MAD</span></span>
+                        </div>
+                        <button onclick="addToCart('OnePlus 12')" class="w-full bg-slate-800/80 hover:bg-cyan-600 border border-slate-700 hover:border-cyan-500 text-white font-bold py-2.5 rounded-xl transition-all flex items-center justify-center gap-2 text-sm group-hover:bg-cyan-600">
+                            <i class="fa-solid fa-cart-plus text-xs"></i>
+                            <span>Add to cart </span>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- View All Products Link -->
+            <div class="text-center mt-12">
+                <a href="#" class="inline-flex items-center gap-2 text-cyan-400 hover:text-cyan-300 font-bold text-base hover:underline transition-all">
+                    <span> View all products</span>
+                    <i class="fa-solid fa-arrow-left text-sm"></i>
+                </a>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Footer Features Bar Section (4 Columns) -->
+    <footer class="bg-slate-950/90 border-t border-slate-800/80 py-10 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+                
+                <!-- Feature 1 -->
+                <div class="flex items-center gap-4 p-3 rounded-xl bg-slate-900/40 border border-slate-800/60">
+                    <div class="w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 text-xl shrink-0">
+                        <i class="fa-solid fa-rotate-left"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-white font-bold text-sm"> Easy returns</h4>
+                        <p class="text-slate-400 text-xs">Free returns within  14  days</p>
+                    </div>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="flex items-center gap-4 p-3 rounded-xl bg-slate-900/40 border border-slate-800/60">
+                    <div class="w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 text-xl shrink-0">
+                        <i class="fa-solid fa-headset"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-white font-bold text-sm">Support 24/7</h4>
+                        <p class="text-slate-400 text-xs">Our customer service is always available</p>
+                    </div>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="flex items-center gap-4 p-3 rounded-xl bg-slate-900/40 border border-slate-800/60">
+                    <div class="w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 text-xl shrink-0">
+                        <i class="fa-solid fa-shield-virus"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-white font-bold text-sm">Secure and Protected  Payment</h4>
+                        <p class="text-slate-400 text-xs">Multiplle and Encrypted Payment methods </p>
+                    </div>
+                </div>
+
+                <!-- Feature 4 -->
+                <div class="flex items-center gap-4 p-3 rounded-xl bg-slate-900/40 border border-slate-800/60">
+                    <div class="w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 text-xl shrink-0">
+                        <i class="fa-solid fa-truck-ramp-box"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-white font-bold text-sm">Fast and free shipping </h4>
+                        <p class="text-slate-400 text-xs">Free shipping for all orders over 500 MAD </p>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Bottom Copyright Bar -->
+            <div class="mt-8 pt-6 border-t border-slate-900 text-center text-xs text-slate-500 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <p>All rights reserved  </p>
+                <div class="flex items-center gap-4 text-slate-400">
+                    <i class="fa-brands fa-cc-visa text-lg hover:text-white transition-colors"></i>
+                    <i class="fa-brands fa-cc-mastercard text-lg hover:text-white transition-colors"></i>
+                    <i class="fa-brands fa-apple-pay text-lg hover:text-white transition-colors"></i>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Add to Cart Toast Notification Box -->
+    <div id="toast" class="fixed bottom-6 left-6 z-50 glass-panel border border-cyan-500/40 text-white px-5 py-3.5 rounded-2xl shadow-2xl flex items-center gap-3">
+        <div class="w-8 h-8 rounded-full bg-cyan-500/20 flex items-center justify-center text-cyan-400">
+            <i class="fa-solid fa-check text-sm"></i>
+        </div>
+        <div>
+            <p id="toastText" class="text-sm font-bold text-white">Product added to cart !</p>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        let cartCount = 3;
+
+        // Mobile Menu Toggle Logic
+        const mobileBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        mobileBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Add to Cart Interactive Functionality
+        function addToCart(productName) {
+            cartCount++;
+            const badge = document.getElementById('cartBadge');
+            badge.innerText = cartCount;
+            
+            // Pop effect on cart badge
+            badge.classList.add('scale-125');
+            setTimeout(() => badge.classList.remove('scale-125'), 200);
+
+            // Toast message logic
+            const toast = document.getElementById('toast');
+            const toastText = document.getElementById('toastText');
+            toastText.innerText = `تم إدراج ${productName} في السلة`;
+            
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

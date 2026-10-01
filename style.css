@@ -1,0 +1,502 @@
+
+/* =========================
+   GLOBAL
+========================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #ffffff;
+
+    background:
+        radial-gradient(circle at 20% 20%, #263b72 0%, transparent 30%),
+        radial-gradient(circle at 80% 80%, #4b176d 0%, transparent 30%),
+        linear-gradient(135deg, #070b18, #101936, #080b16);
+
+    perspective: 1200px;
+    overflow-x: hidden;
+}
+
+
+/* =========================
+   MAIN TITLE
+========================= */
+
+body > h3 {
+    text-align: center;
+    font-size: 42px;
+    margin: 40px 0 25px;
+
+    text-transform: uppercase;
+    letter-spacing: 3px;
+
+    background: linear-gradient(
+        90deg,
+        #00f2ff,
+        #ffffff,
+        #b66cff,
+        #00f2ff
+    );
+
+    background-size: 300%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+
+    animation: titleGlow 6s linear infinite;
+
+    text-shadow:
+        0 0 15px rgba(0, 242, 255, 0.5),
+        0 0 35px rgba(182, 108, 255, 0.3);
+}
+
+@keyframes titleGlow {
+    0% {
+        background-position: 0%;
+    }
+
+    100% {
+        background-position: 300%;
+    }
+}
+
+
+/* =========================
+   MAIN CONTAINER
+========================= */
+
+.header {
+    width: 92%;
+    max-width: 1250px;
+    margin: auto;
+    padding: 35px;
+
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+
+    border-radius: 30px;
+
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+
+    box-shadow:
+        0 30px 80px rgba(0, 0, 0, 0.5),
+        inset 0 1px 1px rgba(255, 255, 255, 0.15);
+
+    transform-style: preserve-3d;
+}
+
+
+/* =========================
+   LOGO
+========================= */
+
+.header > img:first-child {
+    display: block;
+
+    width: 100px;
+    height: 100px;
+
+    object-fit: cover;
+
+    margin: 0 auto 30px;
+
+    border-radius: 25px;
+
+    border: 3px solid rgba(0, 242, 255, 0.7);
+
+    box-shadow:
+        0 0 20px rgba(0, 242, 255, 0.5),
+        0 15px 30px rgba(0, 0, 0, 0.5);
+
+    transition: 0.5s;
+}
+
+.header > img:first-child:hover {
+    transform:
+        translateY(-10px)
+        rotateY(15deg)
+        rotateX(10deg)
+        scale(1.08);
+
+    box-shadow:
+        0 0 35px rgba(0, 242, 255, 0.8),
+        0 25px 45px rgba(0, 0, 0, 0.7);
+}
+
+
+/* =========================
+   NAVIGATION
+========================= */
+
+.header > div:first-of-type {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+
+    gap: 15px;
+
+    padding: 18px;
+
+    margin-bottom: 45px;
+
+    background: rgba(0, 0, 0, 0.25);
+
+    border-radius: 20px;
+
+    box-shadow:
+        inset 0 1px 2px rgba(255,255,255,0.08),
+        0 10px 30px rgba(0,0,0,0.25);
+}
+
+.header a {
+    position: relative;
+
+    padding: 12px 20px;
+
+    color: #ffffff;
+    text-decoration: none;
+
+    font-weight: bold;
+    font-size: 15px;
+
+    border-radius: 12px;
+
+    background: rgba(255,255,255,0.06);
+
+    border: 1px solid rgba(255,255,255,0.1);
+
+    transition: 0.35s;
+
+    overflow: hidden;
+}
+
+.header a::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: -100%;
+
+    width: 100%;
+    height: 100%;
+
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255,255,255,0.25),
+        transparent
+    );
+
+    transition: 0.5s;
+}
+
+.header a:hover::before {
+    left: 100%;
+}
+
+.header a:hover {
+    color: #00f2ff;
+
+    transform:
+        translateY(-5px)
+        translateZ(20px);
+
+    border-color: #00f2ff;
+
+    box-shadow:
+        0 10px 25px rgba(0, 242, 255, 0.25),
+        0 0 15px rgba(0, 242, 255, 0.2);
+}
+
+
+/* =========================
+   HERO SECTION
+========================= */
+
+.header > div:nth-of-type(2) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 40px;
+
+    padding: 45px;
+
+    margin-bottom: 55px;
+
+    min-height: 300px;
+
+    border-radius: 25px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(0, 242, 255, 0.12),
+            rgba(155, 75, 255, 0.12)
+        );
+
+    border: 1px solid rgba(255,255,255,0.12);
+
+    box-shadow:
+        0 25px 50px rgba(0,0,0,0.35),
+        inset 0 1px 1px rgba(255,255,255,0.1);
+
+    transform-style: preserve-3d;
+}
+
+
+/* Hero text */
+
+.header > div:nth-of-type(2) p {
+    font-size: 34px;
+    line-height: 1.3;
+    font-weight: 800;
+
+    max-width: 500px;
+
+    color: #ffffff;
+
+    text-shadow:
+        0 5px 15px rgba(0,0,0,0.5);
+}
+
+
+/* Hero image */
+
+.header > div:nth-of-type(2) img {
+    width: 330px;
+    height: 220px;
+
+    object-fit: contain;
+
+    border-radius: 25px;
+
+    filter:
+        drop-shadow(0 25px 20px rgba(0,0,0,0.5))
+        drop-shadow(0 0 20px rgba(0,242,255,0.25));
+
+    transition: 0.6s;
+
+    transform: rotateY(-10deg) rotateX(5deg);
+}
+
+.header > div:nth-of-type(2) img:hover {
+    transform:
+        rotateY(15deg)
+        rotateX(-5deg)
+        translateY(-15px)
+        scale(1.08);
+
+    filter:
+        drop-shadow(0 35px 30px rgba(0,0,0,0.7))
+        drop-shadow(0 0 35px rgba(0,242,255,0.5));
+}
+
+
+/* =========================
+   PRODUCTS TITLES
+========================= */
+
+.header > h3 {
+    text-align: center;
+
+    font-size: 32px;
+
+    margin-bottom: 12px;
+
+    color: #ffffff;
+
+    text-shadow:
+        0 0 15px rgba(0,242,255,0.4);
+}
+
+.header > h4 {
+    text-align: center;
+
+    color: #aeb9d6;
+
+    font-size: 16px;
+
+    margin-bottom: 35px;
+
+    font-weight: normal;
+}
+
+
+/* =========================
+   PRODUCT AREA
+========================= */
+
+/*
+   This selects the div containing
+   the three phone images.
+*/
+
+.header > div:nth-of-type(3) {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 30px;
+
+    padding: 10px;
+}
+
+
+/* =========================
+   PHONE CARDS
+========================= */
+
+.header > div:nth-of-type(3) img {
+    width: 100%;
+    height: 330px;
+
+    object-fit: contain;
+
+    padding: 25px;
+
+    border-radius: 25px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,0.12),
+            rgba(255,255,255,0.03)
+        );
+
+    border: 1px solid rgba(255,255,255,0.13);
+
+    box-shadow:
+        0 20px 35px rgba(0,0,0,0.45),
+        inset 0 1px 2px rgba(255,255,255,0.15);
+
+    transform:
+        perspective(800px)
+        rotateX(4deg)
+        rotateY(-4deg);
+
+    transition:
+        transform 0.5s,
+        box-shadow 0.5s,
+        border 0.5s;
+
+    cursor: pointer;
+}
+
+
+/* 3D hover */
+
+.header > div:nth-of-type(3) img:hover {
+    transform:
+        perspective(800px)
+        rotateX(-5deg)
+        rotateY(8deg)
+        translateY(-18px)
+        scale(1.04);
+
+    border-color: rgba(0,242,255,0.7);
+
+    box-shadow:
+        0 35px 60px rgba(0,0,0,0.65),
+        0 0 30px rgba(0,242,255,0.25),
+        inset 0 1px 2px rgba(255,255,255,0.2);
+}
+
+
+/* Different 3D angle for each phone */
+
+.header > div:nth-of-type(3) img:nth-child(1) {
+    transform:
+        perspective(800px)
+        rotateY(-8deg)
+        rotateX(4deg);
+}
+
+.header > div:nth-of-type(3) img:nth-child(2) {
+    transform:
+        perspective(800px)
+        rotateY(0deg)
+        rotateX(4deg);
+}
+
+.header > div:nth-of-type(3) img:nth-child(3) {
+    transform:
+        perspective(800px)
+        rotateY(8deg)
+        rotateX(4deg);
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 900px) {
+
+    .header > div:nth-of-type(2) {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .header > div:nth-of-type(2) p {
+        font-size: 28px;
+    }
+
+    .header > div:nth-of-type(3) {
+        grid-template-columns: 1fr;
+    }
+
+    .header > div:nth-of-type(3) img {
+        height: 350px;
+    }
+}
+
+
+@media (max-width: 600px) {
+
+    body > h3 {
+        font-size: 27px;
+        margin-top: 25px;
+    }
+
+    .header {
+        width: 95%;
+        padding: 20px;
+        border-radius: 20px;
+    }
+
+    .header > div:first-of-type {
+        flex-direction: column;
+    }
+
+    .header a {
+        width: 100%;
+        text-align: center;
+    }
+
+    .header > div:nth-of-type(2) {
+        padding: 25px 15px;
+    }
+
+    .header > div:nth-of-type(2) p {
+        font-size: 23px;
+    }
+
+    .header > div:nth-of-type(2) img {
+        width: 100%;
+    }
+
+    .header > div:nth-of-type(3) img {
+        height: 300px;
+    }
+}
